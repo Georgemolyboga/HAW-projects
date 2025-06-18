@@ -1,0 +1,127 @@
+package drawingTool;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+
+public class TestDrawingTool extends JFrame implements ActionListener, ChangeListener {
+    private DrawingArea drawing;
+    private Buttons buttons;
+    private static final int MIN_SIZE = 30;
+    private static final int MAX_SIZE = 120;
+
+    public TestDrawingTool(String title) {
+        super(title);
+        initializeUI();
+        setupEventHandlers();
+        setWindowProperties();
+    }
+
+    private void initializeUI() {
+        setLayout(new BorderLayout());
+        
+        // Initialize components
+        buttons = new Buttons();
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        drawing = new DrawingArea(screenSize.width, screenSize.height);
+        
+        // Add components to frame
+        buttons.addButtonsToAPanel(this);
+        add(drawing, BorderLayout.CENTER);
+        
+        // Set initial control states
+        buttons.getSizeSlider().setMinimum(MIN_SIZE);
+        buttons.getSizeSlider().setMaximum(MAX_SIZE);
+        buttons.getSizeSlider().setValue((MIN_SIZE + MAX_SIZE) / 2);
+        buttons.getSizeInputField().setText(String.valueOf((MIN_SIZE + MAX_SIZE) / 2));
+        updateSizeControls();
+    }
+
+    private void setupEventHandlers() {
+        buttons.addActionListener(this);
+        buttons.addChangeListener(this);
+    }
+
+    private void setWindowProperties() {
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        setBounds(0, 0, screenSize.width, screenSize.height);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setVisible(true);
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        if (e.getSource() == buttons.getGenerateButton()) {
+            handleGenerateAction();
+        } 
+        else if (e.getSource() == buttons.getRandomSizeCheckBox()) {
+            updateSizeControls();
+        }
+        else if (e.getSource() == buttons.getColorButton()) {
+            drawing.getScene().randomizeColors();
+            updateDrawing();
+        }
+        else if (e.getSource() == buttons.getClearButton()) {
+            drawing.getScene().clear();
+            updateDrawing();
+        }
+    }
+
+    private void handleGenerateAction() {
+        try {
+            configureSizeSettings();
+            drawing.getScene().generatePigs();
+            updateDrawing();
+        } catch (NumberFormatException ex) {
+            showErrorDialog("Please enter a valid size between " + MIN_SIZE + " and " + MAX_SIZE);
+        }
+    }
+
+    private void configureSizeSettings() throws NumberFormatException {
+        if (buttons.getRandomSizeCheckBox().isSelected()) {
+            drawing.getScene().setRandomSizes(true);
+            drawing.getScene().setSizeRange(MIN_SIZE, MAX_SIZE);
+        } else {
+            int size = Integer.parseInt(buttons.getSizeInputField().getText());
+            validateSize(size);
+            drawing.getScene().setRandomSizes(false);
+            drawing.getScene().setFixedSize(size);
+        }
+    }
+
+    private void validateSize(int size) {
+        if (size < MIN_SIZE || size > MAX_SIZE) {
+            throw new NumberFormatException("Size out of range");
+        }
+    }
+
+    private void updateSizeControls() {
+        boolean randomSizes = buttons.getRandomSizeCheckBox().isSelected();
+        buttons.getSizeSlider().setEnabled(!randomSizes);
+        buttons.getSizeInputField().setEnabled(!randomSizes);
+    }
+
+    @Override
+    public void stateChanged(ChangeEvent e) {
+        if (e.getSource() == buttons.getSizeSlider()) {
+            int size = buttons.getSizeSlider().getValue();
+            buttons.getSizeInputField().setText(String.valueOf(size));
+        }
+    }
+
+    private void updateDrawing() {
+        drawing.revalidate();
+        drawing.repaint();
+    }
+
+    private void showErrorDialog(String message) {
+        JOptionPane.showMessageDialog(this, message, "Input Error", JOptionPane.ERROR_MESSAGE);
+    }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> new TestDrawingTool("Pig Drawing Tool"));
+    }
+}
