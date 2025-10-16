@@ -415,3 +415,110 @@ local.properties
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
 replay_pid*
+
+# Created by https://www.toptal.com/developers/gitignore/api/c,visualstudio
+# Edit at https://www.toptal.com/developers/gitignore?templates=c,visualstudio
+
+### C ###
+# Prerequisites
+*.d
+
+# Object files
+*.o
+*.ko
+*.obj
+*.elf
+
+# Linker output
+*.ilk
+*.map
+*.exp
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Libraries
+*.lib
+*.a
+*.la
+*.lo
+
+# Shared objects (libraries)
+*.dll
+*.so
+*.so.*
+*.dylib
+
+# Executables
+*.exe
+*.out
+*.app
+*.i*86
+*.x86_64
+*.hex
+
+# Debug files
+*.suo
+*.pdb
+*.mdb
+*.idb
+*.bak
+
+### VisualStudio ###
+# User-specific files
+*.rsuser
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Visual Studio 2015/2017 cache/options directory
+.vs/
+
+# Build results
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+bld/
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+
+# Visual Studio Code files
+.vscode/
+
+# NuGet Packages
+*.nupkg
+# The packages folder can be ignored because of Package Restore
+**/packages/*
+# except build/, which is used as an MSBuild target.
+!**/packages/build/
+# Uncomment if you are using solution-level package management
+#packages/
+
+# IntelliSense and browsing database
+*.sdf
+*.VC.db
+ipch/
+
+# Other
+*.aps
+*.ncb
+*_i.c
+*_p.c
+*.sln.metaproj
+*.[Pp]ublish.xml
+*.tlog
+
+# Microsoft Test Manager
+*.vsmdi
+
+# ReSharper C++
+*_i.h
+*_p.h
